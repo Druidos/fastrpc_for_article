@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<benchmark hardtimelimit="300" timelimit="270" tool="cpachecker">
+    <rundefinition>
+        <option name="-setprop">counterexample.export.extendedWitnessFile=witness.%d.graphml</option>
+        <option name="-setprop">counterexample.export.exportExtendedWitness=true</option>
+        <option name="-setprop">counterexample.export.compressWitness=false</option>
+        <option name="-setprop">cpa.arg.witness.removeInsufficientEdges=false</option>
+        <option name="-setprop">output.disable=true</option>
+        <option name="-heap">4000m</option>
+        <option name="-smg-ldv"/>
+        <option name="-setprop">analysis.machineModel=LINUX64</option>
+        <option name="-setprop">CompositeCPA.cpas=cpa.location.LocationCPA,cpa.callstack.CallstackCPA,cpa.smg.SMGCPA</option>
+        <option name="-setprop">parser.readLineDirectives=false</option>
+    </rundefinition>
+    <tasks>
+        <include>cil.yml</include>
+    </tasks>
+    <propertyfile>safe-prps.prp</propertyfile>
+</benchmark>
