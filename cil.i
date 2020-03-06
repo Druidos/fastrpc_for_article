@@ -6385,17 +6385,6 @@ static char *cif_kasprintf(gfp_t ldv_func_arg1, char const *ldv_func_arg2 , ...)
 #line 26  "/home/debian/klever-inst/klever-work/native-scheduler/scheduler/jobs/a343d8d0-1f27-463a-bb34-4a208534dbf2/klever-core-work-dir/job/build base/Storage/home/druidos/development/clean/linux-stable/include/linux/list.h"
 __inline static void INIT_LIST_HEAD(struct list_head *list)
 {
-  {
-    
-#line 29 
-    union __anonunion___u_11 __u = {.__val = list};
-    
-#line 28 
-    __write_once_size((void volatile *)(& list->next),(void *)(& __u.__c),8);
-    
-#line 28 
-    struct list_head *tmp = __u.__val;
-  }
   
 #line 29 
   list->prev = list;
@@ -6420,11 +6409,7 @@ __inline static void __list_add(struct list_head *new, struct list_head *prev, s
 #line 60 
   
   
-#line 60 
-  if (! __list_add_valid(new,prev,next)) 
-#line 61 
-                                         return;
-  
+ 
 #line 63 
   next->prev = new;
   
@@ -6433,17 +6418,6 @@ __inline static void __list_add(struct list_head *new, struct list_head *prev, s
   
 #line 65 
   new->prev = prev;
-  {
-    
-#line 67 
-    union __anonunion___u_13 __u = {.__val = new};
-    
-#line 66 
-    __write_once_size((void volatile *)(& prev->next),(void *)(& __u.__c),8);
-    
-#line 66 
-    struct list_head *tmp_2 = __u.__val;
-  }
   
 #line 68 
   return;
@@ -6480,17 +6454,6 @@ __inline static void __list_del(struct list_head *prev, struct list_head *next)
   
 #line 97 
   next->prev = prev;
-  {
-    
-#line 107 
-    union __anonunion___u_15 __u = {.__val = next};
-    
-#line 106 
-    __write_once_size((void volatile *)(& prev->next),(void *)(& __u.__c),8);
-    
-#line 106 
-    struct list_head *tmp = __u.__val;
-  }
   
 #line 108 
   return;
@@ -6501,14 +6464,7 @@ __inline static void __list_del(struct list_head *prev, struct list_head *next)
 __inline static void __list_del_entry(struct list_head *entry)
 {
   
-#line 117 
-  
-  
-#line 117 
-  if (! __list_del_entry_valid(entry)) 
-#line 118 
-                                       return;
-  
+
 #line 120 
   __list_del(entry->prev,entry->next);
   
@@ -7545,7 +7501,7 @@ __inline static void kref_init(struct kref *kref)
 {
   
 #line 33 
-  refcount_set(& kref->refcount,1U);
+  kref->refcount.refs.counter=1U;
   
 #line 34 
   return;
@@ -7557,7 +7513,7 @@ __inline static void kref_get(struct kref *kref)
 {
   
 #line 47 
-  refcount_inc_checked(& kref->refcount);
+  kref->refcount.refs.counter = kref->refcount.refs.counter + 1;
   
 #line 48 
   return;
@@ -7570,9 +7526,9 @@ __inline static int kref_put(struct kref *kref, void (*release)(struct kref *))
   
 #line 66 
   
-  
+  kref->refcount.refs.counter = kref->refcount.refs.counter - 1;
 #line 66 
-  if ((int)refcount_dec_and_test_checked(& kref->refcount) != 0) {
+  if (kref->refcount.refs.counter == 0) {
     
 #line 67 
     (*release)(kref);
@@ -12610,7 +12566,78 @@ void emg_insmod_1(void *arg0);
 
 #line 17 
 int main(void);
+void emg_insmod_3(void *arg0)
+{
+  int emg_3_ret;
+  struct rpmsg_device *rpdev;
+  rpdev = ldv_xmalloc_unknown_size(0);
+  
+#line 27 
+  emg_3_ret = fastrpc_rpmsg_probe(rpdev);
+  
+#line 28 
+  emg_3_ret = ldv_post_init(emg_3_ret);
+  
+#line 31 
+  
+  
+#line 31 
+  if (ldv_undef_int() != 0) 
+#line 33 
+                            __VERIFIER_assume(emg_3_ret != 0);
+  else {
+#line 37 
 
+    __VERIFIER_assume(emg_3_ret == 0);
+    while(ldv_undef_int() != 0) {
+	void *data = ldv_xmalloc_unknown_size(0);
+	int len = ldv_undef_int();
+	void *priv = ldv_xmalloc_unknown_size(0);
+	u32 addr = ldv_undef_uint();
+	fastrpc_rpmsg_callback(rpdev, data, len, priv, addr);
+    }
+
+    
+#line 41 
+    fastrpc_rpmsg_remove(rpdev);
+  }
+  
+#line 45 
+  return;
+}
+
+void emg_insmod_2(void *arg0)
+{
+  int emg_2_ret;
+  struct platform_device *pdev;
+  pdev = ldv_xmalloc_unknown_size(0);
+  
+#line 27 
+  emg_2_ret = fastrpc_cb_probe(pdev);
+  
+#line 28 
+  emg_2_ret = ldv_post_init(emg_2_ret);
+  
+#line 31 
+  
+  
+#line 31 
+  if (ldv_undef_int() != 0) 
+#line 33 
+                            __VERIFIER_assume(emg_2_ret != 0);
+  else {
+    
+#line 37 
+    __VERIFIER_assume(emg_2_ret == 0);
+    emg_insmod_3((void *)0);
+    
+#line 41 
+    fastrpc_cb_remove(pdev);
+  }
+  
+#line 45 
+  return;
+}
 
 #line 21  "/home/debian/klever-inst/klever-work/native-scheduler/scheduler/jobs/a343d8d0-1f27-463a-bb34-4a208534dbf2/klever-core-work-dir/job/vtg/drivers/misc/fastrpc.ko/memory safety/emg/environment_model.c"
 void emg_insmod_1(void *arg0)
@@ -12634,6 +12661,7 @@ void emg_insmod_1(void *arg0)
     
 #line 37 
     __VERIFIER_assume(emg_1_ret == 0);
+emg_insmod_2((void *)0);
     
 #line 41 
     emg_fastrpc_exit();
